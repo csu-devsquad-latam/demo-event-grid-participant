@@ -1,0 +1,9 @@
+server:
+  port: 8083
+eventService:
+  participantId: "765995a1-6f66-4311-9a06-0fa391f5289e"
+  url: ""
+  type: "settlementVerify"
+  auth:
+    type: "token"
+    token:
