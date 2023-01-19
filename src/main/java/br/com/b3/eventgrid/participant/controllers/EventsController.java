@@ -17,19 +17,25 @@ public class EventsController {
     @Autowired
     private EventsService eventsService;
 
-    @PostMapping("setup")
+    @GetMapping("health")
+    ResponseEntity<String> health() {
+        return ResponseEntity.ok("{\"status\":\"ok\"}");
+    }
+
+
+    @PostMapping(value = "setup", consumes = {"application/json"})
     ResponseEntity<String> setup(@RequestBody BypassRequest<RegisterRequest> request) {
         String result = eventsService.setup(request);
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping("startSettlement")
+    @PostMapping(value = "startSettlement", consumes = {"application/json"})
     ResponseEntity<String> start(@RequestBody BypassRequest<SettlementRequest> request) {
         String result = eventsService.start(request);
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping("events")
+    @PostMapping(value = "events", consumes = {"application/json"})
     ResponseEntity<Response> events(@RequestBody List<EventGridRequest> eventList) throws Exception {
         var response = eventsService.events(eventList);
         return ResponseEntity.ok(response);

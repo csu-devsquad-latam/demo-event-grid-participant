@@ -6,5 +6,5 @@ COPY --from=mcr.microsoft.com/openjdk/jdk:17-ubuntu $JAVA_HOME $JAVA_HOME
 
 # Continue with your application deployment
 RUN mkdir /opt/app
-COPY target/*.jar /opt/app
-CMD ["java", "-jar", "/opt/app/japp.jar"]
+COPY target/*.jar /opt/app/app.jar
+CMD ["java", "-jar", "/opt/app/app.jar"]

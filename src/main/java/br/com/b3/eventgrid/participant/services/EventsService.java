@@ -41,7 +41,7 @@ public class EventsService {
             String body = mapper.writeValueAsString(request.getData());
 
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(eventServiceUrl))
+                    .uri(new URI(request.getTargetUrl()))
                     .POST(HttpRequest.BodyPublishers.ofString(body))
                     .build();
 
@@ -61,7 +61,7 @@ public class EventsService {
             String body = mapper.writeValueAsString(request.getData());
 
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(verifyUrl))
+                    .uri(new URI(request.getTargetUrl()))
                     .POST(HttpRequest.BodyPublishers.ofString(body))
                     .build();
 
@@ -81,7 +81,7 @@ public class EventsService {
 
         var request = eventList.get(0);
 
-        System.console().printf("Event Type", request.getEventType());
+        System.console().printf("Event Type %s", request.getEventType());
 
         Response response = null;
 
