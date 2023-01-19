@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -15,7 +15,7 @@ public class EventGridRequest {
     private UUID id;
     private String topic;
     private String subject;
-    private Object data;
+    private Map<String, String> data;
     private String eventType;
     private LocalDate eventTime;
     private Integer metadataVersion;
