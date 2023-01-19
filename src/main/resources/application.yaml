@@ -3,7 +3,7 @@ server:
 eventService:
   participantId: "765995a1-6f66-4311-9a06-0fa391f5289e"
   url: ""
-  verifyUrl: "settlement/verify"
+  verifyUrl: "https://demoeventgridbbb-prod.azurewebsites.net/settlement/verify"
   type: "settlementVerify"
   auth:
     type: "token"
