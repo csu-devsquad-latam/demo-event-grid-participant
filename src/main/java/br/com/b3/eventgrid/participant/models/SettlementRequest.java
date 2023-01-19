@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class SettlementRequest {
+    private UUID participantId;
     private UUID transactionId;
     private UUID settlementId;
 }

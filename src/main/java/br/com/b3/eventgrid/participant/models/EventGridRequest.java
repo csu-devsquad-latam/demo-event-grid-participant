@@ -13,12 +13,12 @@ import java.util.UUID;
 @NoArgsConstructor
 public class EventGridRequest {
     private UUID id;
-    private String topic;
     private String subject;
     private Map<String, String> data;
     private String eventType;
+    private String dataVersion;
+    private String metadataVersion;
     private LocalDate eventTime;
-    private Integer metadataVersion;
-    private Integer dataVersion;
+    private String topic;
 
 }
