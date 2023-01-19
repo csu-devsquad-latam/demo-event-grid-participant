@@ -7,6 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ResponseMessage {
-    private String status;
+public class SetupRequest {
+
+    private String targetUrl;
+    private RegisterRequest data;
 }
