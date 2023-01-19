@@ -1,16 +1,17 @@
 package br.com.b3.eventgrid.participant.services;
 
+import br.com.b3.eventgrid.participant.models.BypassRequest;
 import br.com.b3.eventgrid.participant.models.RegisterRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import br.com.b3.eventgrid.participant.models.SettlementRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.util.UUID;
+import java.net.http.HttpResponse;
 
 @Component
 public class EventsService {
@@ -19,6 +20,8 @@ public class EventsService {
     private String participantId;
     @Value("eventService.url")
     private String eventServiceUrl;
+    @Value("eventService.verifyUrl")
+    private String verifyUrl;
     @Value("eventService.type")
     private String eventServiceType;
     @Value("eventService.auth.type")
@@ -29,30 +32,43 @@ public class EventsService {
     @Autowired
     private ObjectMapper mapper;
 
-    public boolean setup() {
+    public String setup(BypassRequest<RegisterRequest> request) {
 
         try {
-            RegisterRequest registerRequest = new RegisterRequest(
-                    UUID.fromString(participantId),
-                    eventServiceUrl,
-                    eventServiceType,
-                    eventServiceAuthType,
-                    eventServiceAuthToken);
+            String body = mapper.writeValueAsString(request.getData());
 
-            String body = mapper.writeValueAsString(registerRequest);
-
-            HttpRequest request = HttpRequest.newBuilder()
+            HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(eventServiceUrl))
                     .POST(HttpRequest.BodyPublishers.ofString(body))
                     .build();
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            return response.body();
         }
         catch (Exception ex){
             throw new RuntimeException(ex);
         }
-
-        return true;
     }
 
+    public String start(BypassRequest<SettlementRequest> request) {
 
+        try {
+            String body = mapper.writeValueAsString(request.getData());
+
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(verifyUrl))
+                    .POST(HttpRequest.BodyPublishers.ofString(body))
+                    .build();
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        }
+        catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+    }
 
 }

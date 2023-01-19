@@ -7,6 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ResponseMessage {
-    private String status;
+public class BypassRequest<T> {
+
+    private String targetUrl;
+    private T data;
 }
