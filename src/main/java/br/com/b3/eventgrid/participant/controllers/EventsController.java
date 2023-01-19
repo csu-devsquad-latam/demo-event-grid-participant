@@ -37,7 +37,7 @@ public class EventsController {
 
     @PostMapping(value = "events", consumes = {"application/json"})
     ResponseEntity<Response> events(@RequestBody List<EventGridRequest> eventList) throws Exception {
-        var response = eventsService.events(eventList);
+        var response = (Response) eventsService.events(eventList);
         return ResponseEntity.ok(response);
     }
 

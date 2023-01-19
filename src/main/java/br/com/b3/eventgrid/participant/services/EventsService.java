@@ -2,6 +2,7 @@ package br.com.b3.eventgrid.participant.services;
 
 import br.com.b3.eventgrid.participant.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Component
@@ -81,19 +83,25 @@ public class EventsService {
 
         var request = eventList.get(0);
 
-        System.console().printf("Event Type %s", request.getEventType());
+        System.out.printf("Event Type %s \n", request.getEventType());
 
         Response response = null;
 
         switch (request.getEventType()) {
             case SubscriptionValidationEvent:
-                var eventGridValidationCodeRequest = (ValidationEventGridRequestData) request.getData();
 
+                var eventGridValidationCodeRequest = new ValidationEventGridRequestData();
+
+                eventGridValidationCodeRequest.setValidationCode(request.getData().get("validationCode"));
+                eventGridValidationCodeRequest.setValidationUrl(request.getData().get("validationUrl"));
                 response = new EventGridResponse();
                 ((EventGridResponse)response).setValidationResponse(eventGridValidationCodeRequest.getValidationCode());
+                break;
             default:
-                ObjectMapper mapper = new ObjectMapper();
-                System.console().printf("Data: %s", mapper.writeValueAsString(request.getData()));
+                request.getData().keySet().forEach( q -> {
+                    System.out.printf( "key: %s - value: %s \n", q, request.getData().get(q) );
+                });
+                response = new GenericResponse();
                 ((GenericResponse)response).setData(request.getData());
         }
 
