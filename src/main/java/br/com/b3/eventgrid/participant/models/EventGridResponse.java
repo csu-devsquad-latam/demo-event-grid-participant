@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class EventGridResponse {
+public class EventGridResponse extends Response{
     private String validationResponse;
 
 }
