@@ -13,7 +13,6 @@ import java.util.List;
 @RequestMapping("/api")
 public class EventsController {
 
-    private final String SubscriptionValidationEvent = "Microsoft.EventGrid.SubscriptionValidationEvent";
 
     @Autowired
     private EventsService eventsService;
@@ -32,31 +31,8 @@ public class EventsController {
 
     @PostMapping("events")
     ResponseEntity<Response> events(@RequestBody List<EventGridRequest> eventList) throws Exception {
-
-        if (eventList == null || eventList.size() == 0) {
-            throw new Exception("No Request Body Available");
-        }
-
-        var request = eventList.get(0);
-
-        System.console().printf("Event Type", request.getEventType());
-
-        switch (request.getEventType()) {
-            case SubscriptionValidationEvent:
-                var eventGridValidationCodeRequest = (ValidationEventGridRequestData) request.getData();
-
-                var response = new EventGridResponse();
-                response.setValidationResponse(eventGridValidationCodeRequest.getValidationCode());
-                return ResponseEntity.ok(response);
-            default:
-                ObjectMapper mapper = new ObjectMapper();
-                System.console().printf("Data: %s", mapper.writeValueAsString(request.getData()));
-
-                var genericResponse = new GenericResponse();
-                genericResponse.setData(request.getData());
-
-                return ResponseEntity.ok(genericResponse);
-        }
+        var response = eventsService.events(eventList);
+        return ResponseEntity.ok(response);
     }
 
 }
