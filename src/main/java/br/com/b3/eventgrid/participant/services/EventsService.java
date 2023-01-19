@@ -1,20 +1,17 @@
 package br.com.b3.eventgrid.participant.services;
 
+import br.com.b3.eventgrid.participant.models.BypassRequest;
 import br.com.b3.eventgrid.participant.models.RegisterRequest;
 import br.com.b3.eventgrid.participant.models.SettlementRequest;
-import br.com.b3.eventgrid.participant.models.SetupRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.UUID;
 
 @Component
 public class EventsService {
@@ -35,7 +32,7 @@ public class EventsService {
     @Autowired
     private ObjectMapper mapper;
 
-    public boolean setup(SetupRequest request) {
+    public String setup(BypassRequest<RegisterRequest> request) {
 
         try {
             String body = mapper.writeValueAsString(request.getData());
@@ -46,22 +43,19 @@ public class EventsService {
                     .build();
 
             HttpClient client = HttpClient.newHttpClient();
-
             HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-
+            return response.body();
         }
         catch (Exception ex){
             throw new RuntimeException(ex);
         }
-
-        return true;
     }
 
-    public boolean start(SettlementRequest request) {
+    public String start(BypassRequest<SettlementRequest> request) {
 
         try {
-            String body = mapper.writeValueAsString(request);
+            String body = mapper.writeValueAsString(request.getData());
 
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(verifyUrl))
@@ -69,14 +63,12 @@ public class EventsService {
                     .build();
 
             HttpClient client = HttpClient.newHttpClient();
-
             HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            return response.body();
         }
         catch (Exception ex){
             throw new RuntimeException(ex);
         }
-
-        return true;
     }
 
 }

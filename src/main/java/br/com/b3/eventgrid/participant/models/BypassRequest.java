@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SetupRequest {
+public class BypassRequest<T> {
 
     private String targetUrl;
-    private RegisterRequest data;
+    private T data;
 }
