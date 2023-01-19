@@ -3,6 +3,7 @@ package br.com.b3.eventgrid.participant.controllers;
 import br.com.b3.eventgrid.participant.models.EventGridResponse;
 import br.com.b3.eventgrid.participant.models.RegisterRequest;
 import br.com.b3.eventgrid.participant.models.ResponseMessage;
+import br.com.b3.eventgrid.participant.models.SettlementRequest;
 import br.com.b3.eventgrid.participant.models.SetupRequest;
 import br.com.b3.eventgrid.participant.services.EventsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,11 @@ public class EventsController {
     }
 
     @PostMapping("startSettlement")
-    ResponseEntity start() {
-        return ResponseEntity.ok().build();
+    ResponseEntity<ResponseMessage> start(@RequestBody SettlementRequest request) {
+        eventsService.start(request);
+        ResponseMessage response = new ResponseMessage();
+        response.setStatus("ok");
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("events")

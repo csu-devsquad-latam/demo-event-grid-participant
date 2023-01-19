@@ -1,6 +1,7 @@
 package br.com.b3.eventgrid.participant.services;
 
 import br.com.b3.eventgrid.participant.models.RegisterRequest;
+import br.com.b3.eventgrid.participant.models.SettlementRequest;
 import br.com.b3.eventgrid.participant.models.SetupRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +23,8 @@ public class EventsService {
     private String participantId;
     @Value("eventService.url")
     private String eventServiceUrl;
+    @Value("eventService.verifyUrl")
+    private String verifyUrl;
     @Value("eventService.type")
     private String eventServiceType;
     @Value("eventService.auth.type")
@@ -55,6 +58,25 @@ public class EventsService {
         return true;
     }
 
+    public boolean start(SettlementRequest request) {
 
+        try {
+            String body = mapper.writeValueAsString(request);
+
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(new URI(verifyUrl))
+                    .POST(HttpRequest.BodyPublishers.ofString(body))
+                    .build();
+
+            HttpClient client = HttpClient.newHttpClient();
+
+            HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        }
+        catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+
+        return true;
+    }
 
 }
