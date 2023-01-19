@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class EventsService {
 
-    private final String SubscriptionValidationEvent = "Microsoft.EventGrid.SubscriptionValidationEvent";
+    private final static String SubscriptionValidationEvent = "Microsoft.EventGrid.SubscriptionValidationEvent";
 
 
     @Value("eventService.participantId")
@@ -45,6 +45,7 @@ public class EventsService {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(request.getTargetUrl()))
                     .POST(HttpRequest.BodyPublishers.ofString(body))
+                    .header("Content-Type", "application/json")
                     .build();
 
             HttpClient client = HttpClient.newHttpClient();
@@ -65,6 +66,7 @@ public class EventsService {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(request.getTargetUrl()))
                     .POST(HttpRequest.BodyPublishers.ofString(body))
+                    .header("Content-Type", "application/json")
                     .build();
 
             HttpClient client = HttpClient.newHttpClient();
